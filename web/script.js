@@ -385,13 +385,11 @@ exitBtn.addEventListener('click', async () => {
             timerInterval = null;
         }
 
-        // ===== 새로 추가되는 부분 =====
         // 만석 타이머 정리
         if (fullTimeout) {
             clearTimeout(fullTimeout);
             fullTimeout = null;
         }
-        // ===== 여기까지 =====
 
         // Reset state
         sec = 50;
