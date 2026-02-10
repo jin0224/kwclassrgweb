@@ -14,6 +14,7 @@ let courses = [];
 let queryTimestamp = null; // 조회한 시간 저장
 let fullTimeout = null; // 만석 타이머
 
+const splashIntroScreen = document.getElementById('splash-screen-intro');
 const splashScreen = document.getElementById('splash-screen');
 const settingsScreen = document.getElementById('settings-screen');
 const mainScreen = document.getElementById('main-screen');
@@ -90,11 +91,17 @@ function showMessageBox(text, title, type, buttons) {
     });
 }
 
-// ===== Screen 1: Splash =====
+// ===== Screen 1: Title Splash =====
 setTimeout(() => {
     splashScreen.style.display = 'none';
+    splashIntroScreen.style.display = 'flex';
+}, 1500);
+
+// ===== Screen 2: Intro Splash =====
+setTimeout(() => {
+    splashIntroScreen.style.display = 'none';
     settingsScreen.style.display = 'flex';
-}, 2000);
+}, 3000);
 
 // ===== Screen 2: Settings =====
 subjectSlider.addEventListener('input', () => {
@@ -372,16 +379,19 @@ exitBtn.addEventListener('click', async () => {
     );
 
     if (result === 'yes') {
+        // Reset and go back to splash
         if (timerInterval) {
             clearInterval(timerInterval);
             timerInterval = null;
         }
 
+        // ===== 새로 추가되는 부분 =====
         // 만석 타이머 정리
         if (fullTimeout) {
             clearTimeout(fullTimeout);
             fullTimeout = null;
         }
+        // ===== 여기까지 =====
 
         // Reset state
         sec = 50;
@@ -413,57 +423,13 @@ exitBtn.addEventListener('click', async () => {
 
         setTimeout(() => {
             splashScreen.style.display = 'none';
-            settingsScreen.style.display = 'flex';
-        }, 2000);
-    }
-});
-
-// ===== Exit Button =====
-exitBtn.addEventListener('click', async () => {
-    const result = await showMessageBox(
-        '수강신청 연습 프로그램을 종료하시겠습니까?',
-        '수강신청 연습',
-        'question',
-        'yesno'
-    );
-
-    if (result === 'yes') {
-        // Reset and go back to splash
-        if (timerInterval) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-
-        // Reset state
-        sec = 50;
-        getNum = 0;
-        isStarted = false;
-        selected = -1;
-        isFull = [];
-        isDone = [];
-        subType = [];
-        courses = [];
-        isBlocked = false;
-
-        // Reset UI
-        clearRef();
-        getListBody.innerHTML = '';
-        favListBody.innerHTML = '';
-        curTimeLabel.textContent = '09:59:50';
-        curTimeLabel.classList.remove('time-red');
-        enrolBtn.disabled = true;
-        enrolBtn.classList.remove('enrol-btn-active');
-        startBtn.style.display = '';
-        document.title = '광운대학교 수강신청 연습 프로그램';
-        loadingOverlay.style.display = 'none';
-
-        // Show splash
-        mainScreen.style.display = 'none';
-        splashScreen.style.display = 'flex';
+            splashIntroScreen.style.display = 'flex';
+        }, 1500);
 
         setTimeout(() => {
-            splashScreen.style.display = 'none';
+            splashIntroScreen.style.display = 'none';
             settingsScreen.style.display = 'flex';
-        }, 2000);
+        }, 3000);
     }
 });
+
